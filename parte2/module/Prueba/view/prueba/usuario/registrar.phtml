@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title"><?php echo $this->escapeHtml($this->titulo) ?></h4>
+</div>
+<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('sistemas/default', array('controller'=>'usuario', 'action' =>'registrar')));
+echo $this->form()->openTag($form);
+?>
+    <fieldset>
+        <div class="modal-body">
+            <?php
+            $idPersona = $form->get('idPersona');
+            echo $this->formInput($idPersona);
+            ?>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="inputUsuario">Usuario</label>
+                <div class="col-md-5">
+                    <?php
+                    $usuario = $form->get('usuario');
+                    echo $this->formInput($usuario);
+                    echo $this->formElementErrors($usuario);
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="inputClave">Clave</label>
+                <div class="col-md-5">
+                    <?php
+                    $clave = $form->get('clave');
+                    echo $this->formInput($clave);
+                    echo $this->formElementErrors($clave);
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <?php echo $this->formElement($form->get('guardar')) ?>
+            <?php echo $this->formElement($form->get('cancelar')) ?>
+        </div>
+    </fieldset>
+<?php echo $this->form()->closeTag() ?>

@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title"><?php echo $this->escapeHtml($this->titulo) ?></h4>
+</div>
+<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('sistemas/default', array('controller'=>'persona', 'action' =>'eliminar')));
+echo $this->form()->openTag($form);
+?>
+    <fieldset>
+        <div class="modal-body">
+            <?php
+            $id = $form->get('idPersona');
+            echo $this->formInput($id);
+            ?>
+            esta seguro de eliminar al usuario <strong><?php echo $this->persona ?>?</strong>
+        </div>
+        <div class="modal-footer">
+            <?php echo $this->formElement($form->get('guardar')) ?>
+            <?php echo $this->formElement($form->get('cancelar')) ?>
+        </div>
+    </fieldset>
+<?php echo $this->form()->closeTag() ?>
