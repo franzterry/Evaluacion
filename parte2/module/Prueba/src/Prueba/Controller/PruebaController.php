@@ -12,9 +12,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Soap\AutoDiscover;
 use Zend\Soap\Server;
+use Zend\Soap\Client;
 use Prueba\Model\Entity\Empleado;
 use Prueba\Model\Entity\Habilidad;
-
+use Prueba\Model\Dao\EmpleadoDao;
 
 class PruebaController extends AbstractActionController {
     
@@ -98,20 +99,43 @@ class PruebaController extends AbstractActionController {
     }
 
     public function soapAction() {
+        error_reporting(0);
+
+        $data = file_get_contents("..".$this->getRequest()->getBaseUrl()."/doc/employees.json");
+        $datos = json_decode($data, true);
+        $empleados = new \ArrayObject();
+        foreach ($datos as $key => $empleado) :
+            $habilidades = new \ArrayObject();
+            foreach ($empleado["skills"] as $key => $habilidad) :
+                $habilidades->append(new Habilidad($habilidad["skill"]));
+            endforeach;
+            $empleados->append(new Empleado($empleado["id"], $empleado["isOnline"], $empleado["salary"], $empleado["age"], $empleado["position"], $empleado["name"], $empleado["gender"], $empleado["email"], $empleado["phone"], $empleado["address"], $habilidades));
+        endforeach;
+        $empleadoClass = new EmpleadoDao($empleados);
+
         $this->getResponse()->getHeaders()->addHeaderLine("Content-type", "text/xml");
         if (isset($_GET["wsdl"])) :
             $autodiscover = new AutoDiscover();
-            $autodiscover->setClass("Prueba\Model\salario")
+            $autodiscover->setClass($empleadoClass)
                 ->setUri(self::WSDL_URI)
-                ->setServiceName("SalarioWsSoapService");
+                ->setServiceName("EmpleadoDaoSoapService");
             $wsdl = $autodiscover->generate();
             $this->getResponse()->setContent($wsdl->toXml());
         else :
             $soap = new Server(self::WSDL_URI."?wsdl");
-            $soap->setClass("Prueba\Model\salario");
+            $soap->setClass($empleadoClass);
             $soap->handle();
         endif;
         return $this->getResponse();
+    }
+
+    public function resultadoAction() {
+        error_reporting(0);
+        $cliente = new Client(self::WSDL_URI."?wsdl");
+        return new ViewModel(array('titulo' => $this->config->titulo->prueba->prueba->listar, 
+                'tituloAlterno' => $this->config->tituloAlterno->prueba->prueba->listar, 
+                'tituloTabla' => $this->config->tituloTabla->prueba->prueba->listar, 
+                'empleados' => $cliente->empleadosRango(1500, 2000)));
     }
     
 }

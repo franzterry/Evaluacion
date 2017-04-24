@@ -69,10 +69,10 @@ class Module implements InitProviderInterface, ConfigProviderInterface, Autoload
                 'Prueba\Controller\Prueba' => function ($sm) {
                     $locator = $sm->getServiceLocator();
                     $config = $locator->get('ConfigIniPrueba');
-                    $empleadoDao = $locator->get('Prueba\Model\EmpleadoDao');
+                    //$empleadoDao = $locator->get('Prueba\Model\Dao\EmpleadoDao');
 
                     $controller = new \Prueba\Controller\PruebaController($config);
-                    $controller->setEmpleadoDao($empleadoDao);
+                    //$controller->setEmpleadoDao($empleadoDao);
                     return $controller;
                 }
             )

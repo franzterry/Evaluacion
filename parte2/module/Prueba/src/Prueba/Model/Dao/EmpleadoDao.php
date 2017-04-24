@@ -8,8 +8,8 @@ namespace Prueba\Model\Dao;
  * @author Franz Orbezo
  */
 
-use Sistemas\Model\Entity\Empleado;
-use Sistemas\Model\DaoInterface\IEmpleadoDao;
+use Prueba\Model\Entity\Empleado;
+use Prueba\Model\DaoInterface\IEmpleadoDao;
 
 class EmpleadoDao implements IEmpleadoDao {
 
@@ -23,7 +23,7 @@ class EmpleadoDao implements IEmpleadoDao {
         $resultado = new \ArrayObject();
         foreach ($this->empleados as $empleado) :
             if ($min<$empleado->getSalary() and $empleado->getSalary()<$max) :
-                $resultado->append(new Empleado($empleado));
+                $resultado->append($empleado);
             endif;
         endforeach;
         return $resultado;

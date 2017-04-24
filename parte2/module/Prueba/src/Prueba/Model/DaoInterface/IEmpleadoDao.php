@@ -1,25 +1,15 @@
 <?php
 
-namespace Sistemas\Model\DaoInterface;
+namespace Prueba\Model\DaoInterface;
 
 /**
- * Description of IAreaDao
+ * Description of IEmpleadoDao
  *
  * @author Franz Orbezo
  */
 
-use Sistemas\Model\Entity\Area;
-
-interface IAreaDao {
+interface IEmpleadoDao {
     
-    public function listar();
-    
-    public function insertar(Area $area);
-    
-    public function modificar(Area $area);
-    
-    public function eliminar(Area $area);
-    
-    public function obtenerPorId($idArea);
+    public function empleadosRango($min, $max);
     
 }
